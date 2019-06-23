@@ -1,0 +1,110 @@
+swagger: "2.0"
+info:
+  description: "API to manage Customer contact numbers"
+  version: "1.0.0"
+  title: "Contact Management REST API"
+  
+host: localhost:8080
+
+schemes:
+- "http"
+
+paths:
+  /contacts/getAll:
+    get:
+      tags:
+      - "contacts"
+      summary: "Get all phone numbers for all customers"
+      description: "Get all phone numbers for all customers"
+      operationId: "getAllNumbers"
+      responses:
+        200:
+          description: "Successfully retrieved all contacts"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/ContactNumber"
+        401:
+          description: "You are not authorized to view the resource"
+        403:
+          description: "Accessing the resource you were trying to reach is forbidden"
+        404:
+          description: "The resource you were trying to reach is not found"
+
+  /contacts/{customerId}:
+    get:
+      tags:
+      - "contacts"
+      summary: "Get all phone numbers for a particular customer"
+      description: "Get all phone numbers for a particular customer"
+      operationId: "getNumbersByCustomerId"
+      parameters:
+        - name: customerId
+          required: true
+          in: path
+          type: string
+      responses:
+        200:
+          description: "Successfully retrieved all contacts for a customer"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/ContactNumber"
+        401:
+          description: "You are not authorized to view the resource"
+        403:
+          description: "Accessing the resource you were trying to reach is forbidden"
+        404:
+          description: "The resource you were trying to reach is not found"
+
+  /contacts/update/{contactId}:
+    put:
+      tags:
+      - "contacts"
+      summary: " Activate a phone number"
+      description: " Activate a phone number"
+      operationId: "activateNumber"
+      parameters:
+        - name: phone
+          required: true
+          in: path
+          type: string
+      responses:
+        200:
+          description: "Successfully activated the contact number"
+        401:
+          description: "You are not authorized to view the resource"
+        403:
+          description: "Accessing the resource you were trying to reach is forbidden"
+        404:
+          description: "The resource you were trying to reach is not found"
+      
+definitions:
+  ContactNumber:
+    description: "Contact details"
+    type: object
+    properties:
+      contactId:
+        type: string
+        description: "Contact Id"
+      countryCode:
+        type: string
+        description: "Contact country code"
+      phoneNumber:
+        type: string
+        description: "Contact number"
+      type:
+        type: string
+        description: "Contact category"
+        enum:
+          - HOME
+          - WORK
+          - MOBILE
+          - FAX
+      active:
+        type: boolean
+        example: false
+        description: "Contact number status"
+      customerId:
+        type: string
+        description: "Customer Id"
