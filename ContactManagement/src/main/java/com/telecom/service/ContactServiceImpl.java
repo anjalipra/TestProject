@@ -9,6 +9,8 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.telecom.exception.ContactNotFoundException;
+import com.telecom.exception.CustomerNotFoundException;
 import com.telecom.model.ContactInformation;
 import com.telecom.repository.ContactManagementRepo;
 
@@ -42,7 +44,7 @@ public class ContactServiceImpl implements ContactService{
 	/**
 	 * This method will return the contacts for a specific customer.
 	 */
-	public List<ContactInformation> getContactsByCustomerId(String customerId) {
+	public List<ContactInformation> getContactsByCustomerId(String customerId) throws CustomerNotFoundException{
 		List<ContactInformation> phoneList = new ArrayList<ContactInformation>();
 		if (null != customerId) {
 			try {
@@ -54,6 +56,7 @@ public class ContactServiceImpl implements ContactService{
 				}
 			} catch (Exception e) {
 				logger.error("An error occurred while fetching the contacts info.");
+				throw new CustomerNotFoundException(customerId);
 			}
 		} else {
 			logger.info("Contact Id is not present.");
@@ -64,13 +67,14 @@ public class ContactServiceImpl implements ContactService{
 	/**
 	 * This method will activate a given number based on the contact Id.
 	 */
-	public void activateNumber(String contactId) {
+	public void activateNumber(String contactId) throws ContactNotFoundException{
 		logger.info("Going to activate the number");
 		try {
 			ContactManagementRepo.getContacts().get(contactId).setActive(true);
 			logger.info("Contacts successfully updated.");
 		}catch(Exception e) {
 			logger.error("An error occurred while updating the contacts info.");
+			throw new ContactNotFoundException(contactId);
 		}
 		
 	}
