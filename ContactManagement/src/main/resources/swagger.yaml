@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: "API to manage Customer contact numbers"
   version: "1.0.0"
-  title: "Contact Management REST API"
+  title: "Customer Contact Management REST API"
   
 host: localhost:8080
 
@@ -65,7 +65,7 @@ paths:
       description: " Activate a phone number"
       operationId: "activateNumber"
       parameters:
-        - name: phone
+        - name: contactId
           required: true
           in: path
           type: string
